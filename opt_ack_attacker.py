@@ -4,8 +4,9 @@ This file implements the Optimal Ack attacker.
 """
 
 from scapy.all import *
+from argparse import ArgumentParser
 
-parser = argparse.ArgumentParser(
+parser = ArgumentParser(
     description='Attack a TCP server with the optimistic ack attack.')
 parser.add_argument('--dport', default=8000, type=int,
                     help='The port to attack.')
