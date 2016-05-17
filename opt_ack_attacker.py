@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""
+This file implements the Optimal Ack attacker.
+"""
+
 from scapy.all import *
 
 parser = argparse.ArgumentParser(
