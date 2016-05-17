@@ -6,6 +6,9 @@ client, and logs the packets passing through the switch.
 
 import argparse
 from mininet.topo import Topo
+from mininet.node import CPULimitedHost
+from mininet.link import TCLink
+from mininet.net import Mininet
 
 parser = argparse.ArgumentParser(description="Create a network toplogy and test clients and servers.")
 parser.add_argument('--delay', type=float, help="Link propagation delay (ms)", default=5)
@@ -24,4 +27,12 @@ class ClientServerTopo(Topo):
         self.addLink(server, switch, bw=args.bandwith, delay=(str(args.delay) + 'ms'), max_queue_size=args.queuesize)
 
 if __name__ == "__main__":
-    pass
+    net = Mininet(topo=ClientServerTopo(), host=CPULimitedHost, link=TCLink)
+    print "Starting mininet network..."
+    net.start()
+
+    print "Pinging all hosts..."
+    net.pingAll()
+
+    print "Stopping mininet network..."
+    net.stop()
