@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 This file starts a simple TCP server that listens for connections. When a
 connection is established, the server sends a bunch of data through tha
@@ -7,7 +9,7 @@ connection. After sending the data, it closes the connection.
 import SocketServer
 import argparse
 
-parser = argparse.ArgumentParser(description='Process some integers.')
+parser = argparse.ArgumentParser(description='Start a TCP server.')
 parser.add_argument('--port', default=8000, type=int,
                     help='The port on which to listen.')
 parser.add_argument('--length', default=100000, type=int,
