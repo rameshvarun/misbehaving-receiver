@@ -5,10 +5,16 @@ client, and logs the packets passing through the switch.
 """
 
 import argparse
+import subprocess
+import signal
+import time
+import os
+
 from mininet.topo import Topo
-from mininet.node import CPULimitedHost
+from mininet.node import CPULimitedHost, UserSwitch
 from mininet.link import TCLink
 from mininet.net import Mininet
+from mininet.cli import CLI
 
 parser = argparse.ArgumentParser(description="Create a network toplogy and test clients and servers.")
 parser.add_argument('--delay', type=float, help="Link propagation delay (ms)", default=5)
@@ -21,18 +27,30 @@ class ClientServerTopo(Topo):
     a server"""
     def build(self, n=2):
         client, server = self.addHost('client'), self.addHost('server')
-        switch = self.addSwitch('switch')
+        switch = self.addSwitch('s0')
 
         self.addLink(client, switch, bw=args.bandwith, delay=(str(args.delay) + 'ms'), max_queue_size=args.queuesize)
         self.addLink(server, switch, bw=args.bandwith, delay=(str(args.delay) + 'ms'), max_queue_size=args.queuesize)
 
 if __name__ == "__main__":
+    os.system('mkdir -p captures')
     net = Mininet(topo=ClientServerTopo(), host=CPULimitedHost, link=TCLink)
     print "Starting mininet network..."
     net.start()
-
-    print "Pinging all hosts..."
     net.pingAll()
 
+    port = 8000
+    tcpdump = net.get('client').popen('tcpdump -w captures/normal.pcap')
+    server = net.get('server').popen('python server.py --port %d' % port)
+    time.sleep(1.0) # Give a second for the server to start up.
+
+    client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port))
+    
+    time.sleep(5.0)
+
     print "Stopping mininet network..."
+    tcpdump.send_signal(signal.SIGINT)
+    server.send_signal(signal.SIGINT)
+    client.send_signal(signal.SIGINT)
+
     net.stop()

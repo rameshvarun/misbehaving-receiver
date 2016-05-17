@@ -22,7 +22,7 @@ class TCPHandler(SocketServer.BaseRequestHandler):
     def handle(self): self.request.sendall(DATA)
 
 if __name__ == "__main__":
-    server = SocketServer.TCPServer(('localhost', args.port), TCPHandler)
+    server = SocketServer.TCPServer(('0.0.0.0', args.port), TCPHandler)
     try:
         print "Starting TCP server on port", args.port, "..."
         server.serve_forever()
