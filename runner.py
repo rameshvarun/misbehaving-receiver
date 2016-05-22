@@ -8,6 +8,7 @@ import argparse
 import subprocess
 import signal
 import time
+import sys
 import os
 
 from mininet.topo import Topo
@@ -16,10 +17,16 @@ from mininet.link import TCLink
 from mininet.net import Mininet
 from mininet.cli import CLI
 
+if os.geteuid() != 0:
+    sys.stderr.write('This script must be run with sudo.\n')
+    sys.exit(1)
+
 parser = argparse.ArgumentParser(description="Create a network toplogy and test clients and servers.")
 parser.add_argument('--delay', type=float, help="Link propagation delay (ms)", default=5)
 parser.add_argument('--bandwith', type=float, help="Bandwidth of network links (Mb/s)", default=1000)
 parser.add_argument('--queuesize', type=int, help="Max buffer size of network interface in packets", default=100)
+parser.add_argument('--client', type=str, choices=['normal', 'modified'], help='The client type to use.', default='normal')
+parser.add_argument('--server', type=str, choices=['normal', 'modified'], help='The server type to use.', default='normal')
 args = parser.parse_args()
 
 class ClientServerTopo(Topo):
@@ -40,11 +47,19 @@ if __name__ == "__main__":
     net.pingAll()
 
     port = 8000
-    tcpdump = net.get('client').popen('tcpdump -w captures/normal.pcap')
-    server = net.get('server').popen('python server.py --port %d' % port)
+    tcpdump = net.get('client').popen('tcpdump -w captures/%s-%s.pcap' % (args.client, args.server))a
+
+    if args.server == 'normal':
+        server = net.get('server').popen('python server.py --port %d' % port)
+    else:
+        sys.stderr.write('Modified server not yet supported.\n')
+
     time.sleep(1.0) # Give a second for the server to start up.
 
-    client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port))
+    if args.client == 'normal':
+        client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port))
+    elif args.client == 'modified':
+        sys.stderr.write('Modified client not yet supported.\n')
     
     time.sleep(5.0)
 
