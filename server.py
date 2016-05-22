@@ -19,7 +19,10 @@ args = parser.parse_args()
 DATA = "F" * args.length
 
 class TCPHandler(SocketServer.BaseRequestHandler):
-    def handle(self): self.request.sendall(DATA)
+    def handle(self):
+        print "Connection opened from %s:%d. Sending data." % self.client_address
+        self.request.sendall(DATA)
+        print "Data sent. Closing connection to %s:%d." % self.client_address
 
 if __name__ == "__main__":
     server = SocketServer.TCPServer(('0.0.0.0', args.port), TCPHandler)
