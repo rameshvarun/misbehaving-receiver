@@ -46,7 +46,7 @@ if __name__ == "__main__":
     normal_acks, normal_data = load_pcap("captures/normal-normal.pcap")
 
     plt.figure()
-    plt.title("A Normal TCP Connection")
+    plt.title("Normal TCP Connection")
     plt.scatter(map(itemgetter(0), normal_acks), map(itemgetter(1), normal_acks), c='red', marker='x', label="ACKs")
     plt.scatter(map(itemgetter(0), normal_data), map(itemgetter(1), normal_data), c='blue', label="Data Segments")
 
@@ -60,16 +60,16 @@ if __name__ == "__main__":
     attack_acks, attack_data = load_pcap("captures/modified-normal.pcap")
 
     plt.figure()
-    plt.title("A Normal TCP Connection vs Optimistic ACK Attacker")
+    plt.title("Normal TCP Connection vs. Optimistic ACK Attacker")
     plt.scatter(map(itemgetter(0), normal_acks), map(itemgetter(1), normal_acks), c='red', marker='x', label="ACKs (Normal)")
     plt.scatter(map(itemgetter(0), normal_data), map(itemgetter(1), normal_data), c='blue', label="Data Segments (Normal)")
 
 
     plt.scatter(map(itemgetter(0), attack_acks), map(itemgetter(1), attack_acks), c='green', marker='x', label="ACKs (Attack)")
-    plt.scatter(map(itemgetter(0), attack_data), map(itemgetter(1), attack_data), c='black', label="Data Segments (Attack)")
+    plt.scatter(map(itemgetter(0), attack_data), map(itemgetter(1), attack_data), c='yellow', label="Data Segments (Attack)")
     
     plt.xlabel("Time (sec)")
     plt.ylabel("Sequence Number (bytes)")
-    plt.legend(loc='lower right')
+    plt.legend(loc='upper left')
 
     plt.savefig("graphs/attack.png")

