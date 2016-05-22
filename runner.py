@@ -24,7 +24,7 @@ if os.geteuid() != 0:
 
 # Argument parsing.
 parser = argparse.ArgumentParser(description="Create a network toplogy and test clients and servers.")
-parser.add_argument('--delay', type=float, help="Link propagation delay (ms)", default=30)
+parser.add_argument('--delay', type=float, help="Link propagation delay (ms)", default=50)
 parser.add_argument('--bandwith', type=float, help="Bandwidth of network links (Mb/s)", default=1000)
 parser.add_argument('--queuesize', type=int, help="Max buffer size of network interface in packets", default=100)
 parser.add_argument('--client', type=str, choices=['normal', 'modified'], help='The client type to use.', default='normal')
