@@ -64,7 +64,7 @@ if __name__ == "__main__":
         if args.client == 'normal':
             client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port))
         elif args.client == 'modified':
-            client = net.get('client').popen("python opt_ack_attacker.py --host %s --dport %d" % (net.get('server').IP(), port))
+            client = net.get('client').popen("python attackers/opt_ack_attacker.py --host %s --dport %d" % (net.get('server').IP(), port))
         
         time.sleep(5.0)
 
