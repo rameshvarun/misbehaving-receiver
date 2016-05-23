@@ -19,3 +19,7 @@ args = parser.parse_args()
 packet = IP(dst=args.host) / TCP(sport=args.sport, dport=args.dport,
                                  flags='S', seq=12345)
 send(packet)
+
+
+# Get the receiver to ACK more stuff... and it's not gonna be some vanilla TCP receiver that's TelNET... how to do?
+# no display name and no $DISPLAY environment variable error when runnnig the graph python module. 

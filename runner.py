@@ -44,7 +44,7 @@ if __name__ == "__main__":
     server = net.get('server').popen('python server.py --port %d' % port)
     time.sleep(1.0) # Give a second for the server to start up.
 
-    client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port))
+    client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port)) #client opens 
     
     time.sleep(5.0)
 
