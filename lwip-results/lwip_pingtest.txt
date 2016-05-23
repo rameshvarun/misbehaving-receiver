@@ -1,0 +1,23 @@
+PING 172.16.0.2 (172.16.0.2) 56(84) bytes of data.
+64 bytes from 172.16.0.2: icmp_seq=2 ttl=255 time=6.51 ms
+64 bytes from 172.16.0.2: icmp_seq=3 ttl=255 time=0.106 ms
+64 bytes from 172.16.0.2: icmp_seq=4 ttl=255 time=0.116 ms
+64 bytes from 172.16.0.2: icmp_seq=5 ttl=255 time=0.135 ms
+64 bytes from 172.16.0.2: icmp_seq=6 ttl=255 time=0.092 ms
+64 bytes from 172.16.0.2: icmp_seq=7 ttl=255 time=0.130 ms
+64 bytes from 172.16.0.2: icmp_seq=8 ttl=255 time=0.140 ms
+64 bytes from 172.16.0.2: icmp_seq=9 ttl=255 time=0.136 ms
+64 bytes from 172.16.0.2: icmp_seq=10 ttl=255 time=0.191 ms
+64 bytes from 172.16.0.2: icmp_seq=11 ttl=255 time=0.375 ms
+64 bytes from 172.16.0.2: icmp_seq=12 ttl=255 time=0.093 ms
+64 bytes from 172.16.0.2: icmp_seq=13 ttl=255 time=0.100 ms
+64 bytes from 172.16.0.2: icmp_seq=14 ttl=255 time=0.079 ms
+64 bytes from 172.16.0.2: icmp_seq=15 ttl=255 time=0.224 ms
+64 bytes from 172.16.0.2: icmp_seq=16 ttl=255 time=0.081 ms
+64 bytes from 172.16.0.2: icmp_seq=17 ttl=255 time=0.104 ms
+64 bytes from 172.16.0.2: icmp_seq=18 ttl=255 time=0.085 ms
+64 bytes from 172.16.0.2: icmp_seq=19 ttl=255 time=0.077 ms
+
+--- 172.16.0.2 ping statistics ---
+19 packets transmitted, 18 received, 5% packet loss, time 18008ms
+rtt min/avg/max/mdev = 0.077/0.487/6.512/1.462 ms
