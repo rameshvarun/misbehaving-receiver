@@ -5,6 +5,7 @@ client, and logs the packets passing through the switch.
 """
 
 import argparse
+import random
 import subprocess
 import signal
 import time
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     net.pingAll()
 
     if not args.cli:
-        port = 8000
+        port = random.randint(49152, 65535)
         tcpdump = net.get('client').popen('tcpdump -w captures/%s-%s.pcap' % (args.client, args.server))
 
         if args.server == 'normal':
