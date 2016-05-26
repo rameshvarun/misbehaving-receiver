@@ -56,7 +56,6 @@ if __name__ == "__main__":
     # client = net.get('client').popen("telnet %s %d" % (net.get('server').IP(), port)) #client starts to ping. 
 
     #os.system("/home/cs244/cs244assn/misbehaving-receiver/lwip-tap/lwip-tap -i addr=172.16.0.2,netmask=255.255.255.0,gw=172.16.0.1")
-    os.system('mkdir -p lwip-results')
     #client = net.get('client').popen("ping 172.16.0.2 > lwip-results/lwip_pingtest.txt") #client starts to ping. 
 
     os.system('mkdir -p lwip-results')
@@ -66,9 +65,7 @@ if __name__ == "__main__":
     server = net.get('server').popen([command, arg1,arg2], cwd="/home/cs244/cs244assign/misbehaving-receiver/lwip-tap/")
     client = net.get('client').popen("ping 172.16.0.2 > lwip-results/lwip_pingtest.txt")
 
-
-
-    time.sleep(5.0)
+    time.sleep(3)
  
     print "Stopping mininet network..."
     #tcpdump.send_signal(signal.SIGINT)
