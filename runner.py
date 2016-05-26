@@ -50,14 +50,17 @@ if __name__ == "__main__":
     net.start()
     net.pingAll()
 
+    port = random.randint(49152, 65535) if args.server == 'normal' else 7
+
     if not args.cli:
-        port = random.randint(49152, 65535)
         tcpdump = net.get('client').popen('tcpdump -w captures/%s-%s.pcap' % (args.client, args.server))
 
         if args.server == 'normal':
             server = net.get('server').popen('python server.py --port %d' % port)
-        else:
-            sys.stderr.write('Modified server not yet supported.\n')
+        else: 
+            net.get('server').cmd('sysctl net.ipv4.ip_forward=1')
+            net.get('server').cmd('route add default gw %s' % net.get('server').IP())
+            server = net.get('server').popen('sh lwip-server.sh')
 
         time.sleep(1.0) # Give a second for the server to start up.
 
