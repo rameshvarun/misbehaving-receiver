@@ -63,7 +63,7 @@ if __name__ == "__main__":
         if args.server == 'kernel':
             server = server_node.popen('python server.py --port %d' % port)
         elif args.server == 'lwip':
-            server = net.get('server').popen('sh lwip-server.sh')
+            server = server_node.popen('sh lwip-server.sh')
         elif args.server == 'lwip-defended':
             raise "lwip-defended not yet implemented."
         else:

