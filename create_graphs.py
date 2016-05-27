@@ -61,24 +61,41 @@ def create_graph(title, output, graphs):
 if __name__ == "__main__":
     os.system("mkdir -p graphs")
 
-    create_graph("Kernel TCP Stack - A Normal TCP Connection", "graphs/normal-kernel.png", [("captures/normal-normal.pcap", 'ACKs', 'Data Segments')])
+    # Test the Kernel TCP stack against a normal client, as well as the attackers.
 
+    create_graph("Kernel TCP Stack - A Normal TCP Connection", "graphs/kernel-kernel.png", [("captures/kernel-kernel.pcap", 'ACKs', 'Data Segments')])
 
-    '''attack_acks, attack_data = load_pcap("captures/modified-normal.pcap")
+    create_graph("Kernel TCP Stack vs. Optimistic ACK Attacker", "graphs/kernel-opt-attack.png", [
+        ("captures/kernel-kernel.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/opt-ack-kernel.pcap", 'ACKs (Optimistic Ack)', 'Data Segments (Optimistic Ack)')
+        ])
 
-    plt.figure()
-    plt.title("Kernel TCP Stack vs. Optimistic ACK Attacker")
-    plt.scatter(map(itemgetter(0), normal_acks), map(itemgetter(1), normal_acks), c='red', marker='x', label="ACKs (Normal)")
-    plt.scatter(map(itemgetter(0), normal_data), map(itemgetter(1), normal_data), c='blue', label="Data Segments (Normal)")
+    create_graph("Kernel TCP Stack vs. ACK Division Attacker", "graphs/kernel-ack-division.png", [
+        ("captures/kernel-kernel.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/ack-division-kernel.pcap", 'ACKs (Ack Division)', 'Data Segments (Ack Division)')
+        ])
 
-
-    plt.scatter(map(itemgetter(0), attack_acks), map(itemgetter(1), attack_acks), c='green', marker='x', label="ACKs (Attack)")
-    plt.scatter(map(itemgetter(0), attack_data), map(itemgetter(1), attack_data), c='yellow', label="Data Segments (Attack)")
+    create_graph("Kernel TCP Stack vs. Duplicate ACK Attacker", "graphs/kernel-dup-ack.png", [
+        ("captures/kernel-kernel.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/dup-ack-kernel.pcap", 'ACKs (Duplicate ACK)', 'Data Segments (Duplicate ACK)')
+        ])
     
-    plt.xlabel("Time (sec)")
-    plt.ylabel("Sequence Number (bytes)")
-    plt.legend(loc='upper left')
+    # Test the LWIP stack against a normal client, as well as attackers.
+    
+    create_graph("LWIP with Normal TCP Client", "graphs/kernel-lwip.png", [("captures/kernel-lwip.pcap", 'ACKs', 'Data Segments')])
 
-    plt.savefig("graphs/kernel-opt-attack.png")'''
+    create_graph("LWIP Stack vs. ACK Division Attacker", "graphs/lwip-ack-div.png", [
+        ("captures/kernel-lwip.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/ack-division-lwip.pcap", 'ACKs (Ack Division)', 'Data Segments (Ack Division)')
+        ])
 
-    create_graph("LWIP with Normal TCP Client", "graphs/normal-lwip-unmodified.png", [("captures/normal-modified.pcap", 'ACKs', 'Data Segments')])
+    create_graph("LWIP Stack vs. Opt Ack Attacker", "graphs/lwip-opt-ack.png", [
+        ("captures/kernel-lwip.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/opt-ack-lwip.pcap", 'ACKs (Optimistic Ack)', 'Data Segments (Optimistic Ack)')
+        ])
+    
+    create_graph("LWIP Stack vs. Dup Ack Attacker", "graphs/lwip-dup-ack.png", [
+        ("captures/kernel-lwip.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/dup-ack-lwip.pcap", 'ACKs (Duplicate Ack)', 'Data Segments (Duplicate Ack)')
+        ])
+    
