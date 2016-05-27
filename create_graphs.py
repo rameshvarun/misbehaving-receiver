@@ -41,26 +41,33 @@ def load_pcap(filename):
 
     return acks, data
 
-if __name__ == "__main__":
-    os.system("mkdir -p graphs")
-    normal_acks, normal_data = load_pcap("captures/normal-normal.pcap")
+def create_graph(title, output, graphs):
+    colors = [('red', 'blue'), ('green', 'yellow')]
 
     plt.figure()
-    plt.title("Normal TCP Connection")
-    plt.scatter(map(itemgetter(0), normal_acks), map(itemgetter(1), normal_acks), c='red', marker='x', label="ACKs")
-    plt.scatter(map(itemgetter(0), normal_data), map(itemgetter(1), normal_data), c='blue', label="Data Segments")
+    plt.title(title)
 
+    for i, (filename, ack_label, data_label) in enumerate(graphs):
+        acks, data = load_pcap(filename)
+        plt.scatter(map(itemgetter(0), acks), map(itemgetter(1), acks), c=colors[i][0], marker='x', label="ACKs")
+        plt.scatter(map(itemgetter(0), data), map(itemgetter(1), data), c=colors[i][1], label="Data Segments")
+    
     plt.xlabel("Time (sec)")
     plt.ylabel("Sequence Number (bytes)")
     plt.legend(loc='lower right')
+    
+    plt.savefig(output)
 
-    plt.savefig("graphs/normal.png")
+if __name__ == "__main__":
+    os.system("mkdir -p graphs")
+
+    create_graph("Kernel TCP Stack - A Normal TCP Connection", "graphs/normal-kernel.png", [("captures/normal-normal.pcap", 'ACKs', 'Data Segments')])
 
 
-    attack_acks, attack_data = load_pcap("captures/modified-normal.pcap")
+    '''attack_acks, attack_data = load_pcap("captures/modified-normal.pcap")
 
     plt.figure()
-    plt.title("Normal TCP Connection vs. Optimistic ACK Attacker")
+    plt.title("Kernel TCP Stack vs. Optimistic ACK Attacker")
     plt.scatter(map(itemgetter(0), normal_acks), map(itemgetter(1), normal_acks), c='red', marker='x', label="ACKs (Normal)")
     plt.scatter(map(itemgetter(0), normal_data), map(itemgetter(1), normal_data), c='blue', label="Data Segments (Normal)")
 
@@ -72,4 +79,6 @@ if __name__ == "__main__":
     plt.ylabel("Sequence Number (bytes)")
     plt.legend(loc='upper left')
 
-    plt.savefig("graphs/attack.png")
+    plt.savefig("graphs/kernel-opt-attack.png")'''
+
+    create_graph("LWIP with Normal TCP Client", "graphs/normal-lwip-unmodified.png", [("captures/normal-modified.pcap", 'ACKs', 'Data Segments')])
