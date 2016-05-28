@@ -13,16 +13,20 @@ echo "Destroying existing mininet topology..."
 mn -c
 
 echo "Generating network traces..."
+
+# Run the kernel server against various attackers.
 python runner.py --server=kernel --client=kernel
 python runner.py --server=kernel --client=opt-ack
 python runner.py --server=kernel --client=dup-ack
 python runner.py --server=kernel --client=ack-division
 
+# Run the vanilla LWIP server against various attackers.
 python runner.py --server=lwip --client=kernel
 python runner.py --server=lwip --client=opt-ack
 python runner.py --server=lwip --client=dup-ack
 python runner.py --server=lwip --client=ack-division
 
+# Run the defended LWIP server against the attackers.
 python runner.py --server=lwip-defended --client=kernel
 python runner.py --server=lwip-defended --client=opt-ack
 python runner.py --server=lwip-defended --client=ack-division
