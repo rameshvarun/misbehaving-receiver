@@ -1,0 +1,4 @@
+*.o
+*~
+lwip-tap
+config.log
