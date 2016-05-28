@@ -5,6 +5,10 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+echo "Building LWIP stacks."
+(cd lwip-tap; make)
+(cd lwip-tap-defended; make)
+
 echo "Destroying existing mininet topology..."
 mn -c
 
