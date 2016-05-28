@@ -56,6 +56,7 @@
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 
 /* Define some copy-macros for checksum-on-copy so that the code looks
    nicer by preventing too many ifdef's. */
@@ -465,7 +466,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
      * the end.
      */
     if ((pos < len) && (space > 0) && (last_unsent->len > 0)) {
-      u16_t seglen = space < len - pos ? space : len - pos;
+      u16_t seglen = (space < len - pos ? space : len - pos);
       seg = last_unsent;
 
       /* Create a pbuf with a copy or reference to seglen bytes. We
@@ -522,7 +523,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
   while (pos < len) {
     struct pbuf *p;
     u16_t left = len - pos;
-    u16_t max_len = mss_local - optlen;
+    u16_t max_len = mss_local - optlen - rand() % 15;
     u16_t seglen = left > max_len ? max_len : left;
 #if TCP_CHECKSUM_ON_COPY
     u16_t chksum = 0;

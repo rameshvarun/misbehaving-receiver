@@ -19,5 +19,10 @@ python runner.py --server=lwip --client=opt-ack
 python runner.py --server=lwip --client=dup-ack
 python runner.py --server=lwip --client=ack-division
 
+python runner.py --server=lwip-defended --client=kernel
+python runner.py --server=lwip-defended --client=opt-ack
+python runner.py --server=lwip-defended --client=ack-division
+python runner.py --server=lwip-defended --client=dup-ack
+
 echo "Creating graphs..."
 python create_graphs.py
