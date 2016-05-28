@@ -1,6 +1,10 @@
 # Attacks on Congestion Control by a Misbehaving TCP Receiver
 
+The repository contains scripts for replicating the results in the paper ["Attacks on Congestion Control by a Misbehaving TCP Receiver"](https://cseweb.ucsd.edu/~savage/papers/CCR99.pdf) by Savage Cardwell et. al. This project was done for the [CS244](https://web.stanford.edu/class/cs244/) (Advanced Topics in Networking) class at Stanford. The associated writeup is here. (LINK NEEDED)
+
 ## Replicating Results
+
+The results here can either be replicated on EC2 or in VirtualBox. To setup an EC2 machine, use the instructions here - https://web.stanford.edu/class/cs244/ec2setup.html. Follow the instructions here to setup a local virtaul machine in virtual box - https://web.stanford.edu/class/cs244/vbsetup.html. If you still have your virtual machine from PA1, then you should be able to use it without any problems. Once logged, in run the following comamnds.
 
 ```bash
 git clone https://github.com/rameshvarun/misbehaving-receiver.git
