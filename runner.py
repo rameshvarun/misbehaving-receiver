@@ -41,7 +41,7 @@ class ClientServerTopo(Topo):
         switch = self.addSwitch('s0')
 
         self.addLink(client, switch, bw=args.bandwith, delay=(str(args.delay) + 'ms'), max_queue_size=args.queuesize)
-        self.addLink(server, switch, bw=args.bandwith, delay=(str(args.delay) + 'ms'), max_queue_size=args.queuesize)
+        self.addLink(server, switch, bw=args.bandwith, delay=(str(args.delay) + 'ms'), max_queue_size=args.queuesize)        
 
 if __name__ == "__main__":
     os.system('mkdir -p captures')
@@ -52,6 +52,8 @@ if __name__ == "__main__":
 
     server_node = net.get('server')
     client_node = net.get('client')
+   
+    client_node.cmd("iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP")
     
     # For the LWIP stack, we use a fixed port and ip address for the server.
     port = random.randint(49152, 65535) if args.server == 'kernel' else 7
