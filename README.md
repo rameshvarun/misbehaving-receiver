@@ -2,6 +2,8 @@
 
 ## Replicating Results
 
+Follow the instructions here to setup a virtual machine - https://web.stanford.edu/class/cs244/vbsetup.html. If you still have your virtual machine from PA1, then you should be able to use it without any problems. Once logged, in run the following comamnds.
+
 ```bash
 git clone https://github.com/rameshvarun/misbehaving-receiver.git
 cd misbehaving-receiver
