@@ -12,6 +12,8 @@ cd misbehaving-receiver
 sudo run-experiment.sh
 ```
 
+The graphs should now be in the `graphs/` folder. The images that appear in our report are `graphs/lwip-opt-ack.png` and `graphs/defended-lwip-opt-ack.png`.
+
 ## Files Breakdown
 - [run-experiment.sh](./run-experiment.sh) - This file runs the entire experiement, generating all of the network traces and all of the graphs.
 - [opt-ack-defense.diff](./opt-ack-defense.diff) - This is our defense against optimistic ACK attacks, displayed as a patch.
