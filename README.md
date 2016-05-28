@@ -4,7 +4,7 @@ The repository contains scripts for replicating the results in the paper ["Attac
 
 ## Replicating Results
 
-Follow the instructions here to setup a virtual machine - https://web.stanford.edu/class/cs244/vbsetup.html. If you still have your virtual machine from PA1, then you should be able to use it without any problems. Once logged, in run the following comamnds.
+The results here can either be replicated on EC2 or in VirtualBox. To setup an EC2 machine, use the instructions here - https://web.stanford.edu/class/cs244/ec2setup.html. Follow the instructions here to setup a local virtaul machine in virtual box - https://web.stanford.edu/class/cs244/vbsetup.html. If you still have your virtual machine from PA1, then you should be able to use it without any problems. Once logged, in run the following comamnds.
 
 ```bash
 git clone https://github.com/rameshvarun/misbehaving-receiver.git
