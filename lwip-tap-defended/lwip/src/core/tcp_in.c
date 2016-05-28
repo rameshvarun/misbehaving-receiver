@@ -957,97 +957,102 @@ tcp_receive(struct tcp_pcb *pcb)
       }
     } else if (TCP_SEQ_BETWEEN(ackno, pcb->lastack+1, pcb->snd_nxt)){
       /* We come here when the ACK acknowledges new data. */
-
-      /* Reset the "IN Fast Retransmit" flag, since we are no longer
-         in fast retransmit. Also reset the congestion window to the
-         slow start threshold. */
-      if (pcb->flags & TF_INFR) {
-        pcb->flags &= ~TF_INFR;
-        pcb->cwnd = pcb->ssthresh;
-      }
-
-      /* Reset the number of retransmissions. */
-      pcb->nrtx = 0;
-
-      /* Reset the retransmission time-out. */
-      pcb->rto = (pcb->sa >> 3) + pcb->sv;
-
-      /* Update the send buffer space. Diff between the two can never exceed 64K? */
-      pcb->acked = (u16_t)(ackno - pcb->lastack);
-
-      pcb->snd_buf += pcb->acked;
-
-      /* Reset the fast retransmit variables. */
-      pcb->dupacks = 0;
-      pcb->lastack = ackno;
-
+      
       /* Optimistic ACK Defense: Check to see if this ack falls on a segment boundary. */
       for (next = pcb->unacked; next != NULL; next = next->next) {
 	if (ntohl(next->tcphdr->seqno) + TCP_TCPLEN(next) == ackno)
 	  ack_on_segment_boundary = 1;
       }
 
-      /* Update the congestion control variables (cwnd and
-         ssthresh). */
-      if (pcb->state >= ESTABLISHED && ack_on_segment_boundary) {
-        if (pcb->cwnd < pcb->ssthresh) {
-          if ((u16_t)(pcb->cwnd + pcb->mss) > pcb->cwnd) {
-            pcb->cwnd += pcb->mss;
-          }
-          LWIP_DEBUGF(TCP_CWND_DEBUG, ("tcp_receive: slow start cwnd %"U16_F"\n", pcb->cwnd));
-        } else {
-          u16_t new_cwnd = (pcb->cwnd + pcb->mss * pcb->mss / pcb->cwnd);
-          if (new_cwnd > pcb->cwnd) {
-            pcb->cwnd = new_cwnd;
-          }
-          LWIP_DEBUGF(TCP_CWND_DEBUG, ("tcp_receive: congestion avoidance cwnd %"U16_F"\n", pcb->cwnd));
-        }
+      /* Optimistic ACK Defense: Only process an ack if it falls on a segment boundary. */
+      if (ack_on_segment_boundary) {
+
+	/* Reset the "IN Fast Retransmit" flag, since we are no longer
+	   in fast retransmit. Also reset the congestion window to the
+	   slow start threshold. */
+	if (pcb->flags & TF_INFR) {
+	  pcb->flags &= ~TF_INFR;
+	  pcb->cwnd = pcb->ssthresh;
+	}
+
+	/* Reset the number of retransmissions. */
+	pcb->nrtx = 0;
+
+	/* Reset the retransmission time-out. */
+	pcb->rto = (pcb->sa >> 3) + pcb->sv;
+
+	/* Update the send buffer space. Diff between the two can never exceed 64K? */
+	pcb->acked = (u16_t)(ackno - pcb->lastack);
+
+	pcb->snd_buf += pcb->acked;
+
+	/* Reset the fast retransmit variables. */
+	pcb->dupacks = 0;
+	pcb->lastack = ackno;
+
+
+	/* Update the congestion control variables (cwnd and
+	   ssthresh). */
+	if (pcb->state >= ESTABLISHED) {
+	  if (pcb->cwnd < pcb->ssthresh) {
+	    if ((u16_t)(pcb->cwnd + pcb->mss) > pcb->cwnd) {
+	      pcb->cwnd += pcb->mss;
+	    }
+	    LWIP_DEBUGF(TCP_CWND_DEBUG, ("tcp_receive: slow start cwnd %"U16_F"\n", pcb->cwnd));
+	  } else {
+	    u16_t new_cwnd = (pcb->cwnd + pcb->mss * pcb->mss / pcb->cwnd);
+	    if (new_cwnd > pcb->cwnd) {
+	      pcb->cwnd = new_cwnd;
+	    }
+	    LWIP_DEBUGF(TCP_CWND_DEBUG, ("tcp_receive: congestion avoidance cwnd %"U16_F"\n", pcb->cwnd));
+	  }
+	}
+	LWIP_DEBUGF(TCP_INPUT_DEBUG, ("tcp_receive: ACK for %"U32_F", unacked->seqno %"U32_F":%"U32_F"\n",
+				      ackno,
+				      pcb->unacked != NULL?
+				      ntohl(pcb->unacked->tcphdr->seqno): 0,
+				      pcb->unacked != NULL?
+				      ntohl(pcb->unacked->tcphdr->seqno) + TCP_TCPLEN(pcb->unacked): 0));
+
+	/* Remove segment from the unacknowledged list if the incoming
+	   ACK acknowlegdes them. */
+	while (pcb->unacked != NULL &&
+	       TCP_SEQ_LEQ(ntohl(pcb->unacked->tcphdr->seqno) +
+			   TCP_TCPLEN(pcb->unacked), ackno)) {
+	  LWIP_DEBUGF(TCP_INPUT_DEBUG, ("tcp_receive: removing %"U32_F":%"U32_F" from pcb->unacked\n",
+					ntohl(pcb->unacked->tcphdr->seqno),
+					ntohl(pcb->unacked->tcphdr->seqno) +
+					TCP_TCPLEN(pcb->unacked)));
+
+	  next = pcb->unacked;
+	  pcb->unacked = pcb->unacked->next;
+
+	  LWIP_DEBUGF(TCP_QLEN_DEBUG, ("tcp_receive: queuelen %"U16_F" ... ", (u16_t)pcb->snd_queuelen));
+	  LWIP_ASSERT("pcb->snd_queuelen >= pbuf_clen(next->p)", (pcb->snd_queuelen >= pbuf_clen(next->p)));
+	  /* Prevent ACK for FIN to generate a sent event */
+	  if ((pcb->acked != 0) && ((TCPH_FLAGS(next->tcphdr) & TCP_FIN) != 0)) {
+	    pcb->acked--;
+	  }
+
+	  pcb->snd_queuelen -= pbuf_clen(next->p);
+	  tcp_seg_free(next);
+
+	  LWIP_DEBUGF(TCP_QLEN_DEBUG, ("%"U16_F" (after freeing unacked)\n", (u16_t)pcb->snd_queuelen));
+	  if (pcb->snd_queuelen != 0) {
+	    LWIP_ASSERT("tcp_receive: valid queue length", pcb->unacked != NULL ||
+			pcb->unsent != NULL);
+	  }
+	}
+
+	/* If there's nothing left to acknowledge, stop the retransmit
+	   timer, otherwise reset it to start again */
+	if(pcb->unacked == NULL)
+	  pcb->rtime = -1;
+	else
+	  pcb->rtime = 0;
+
+	pcb->polltmr = 0;
       }
-      LWIP_DEBUGF(TCP_INPUT_DEBUG, ("tcp_receive: ACK for %"U32_F", unacked->seqno %"U32_F":%"U32_F"\n",
-                                    ackno,
-                                    pcb->unacked != NULL?
-                                    ntohl(pcb->unacked->tcphdr->seqno): 0,
-                                    pcb->unacked != NULL?
-                                    ntohl(pcb->unacked->tcphdr->seqno) + TCP_TCPLEN(pcb->unacked): 0));
-
-      /* Remove segment from the unacknowledged list if the incoming
-         ACK acknowlegdes them. */
-      while (pcb->unacked != NULL &&
-             TCP_SEQ_LEQ(ntohl(pcb->unacked->tcphdr->seqno) +
-                         TCP_TCPLEN(pcb->unacked), ackno)) {
-        LWIP_DEBUGF(TCP_INPUT_DEBUG, ("tcp_receive: removing %"U32_F":%"U32_F" from pcb->unacked\n",
-                                      ntohl(pcb->unacked->tcphdr->seqno),
-                                      ntohl(pcb->unacked->tcphdr->seqno) +
-                                      TCP_TCPLEN(pcb->unacked)));
-
-        next = pcb->unacked;
-        pcb->unacked = pcb->unacked->next;
-
-        LWIP_DEBUGF(TCP_QLEN_DEBUG, ("tcp_receive: queuelen %"U16_F" ... ", (u16_t)pcb->snd_queuelen));
-        LWIP_ASSERT("pcb->snd_queuelen >= pbuf_clen(next->p)", (pcb->snd_queuelen >= pbuf_clen(next->p)));
-        /* Prevent ACK for FIN to generate a sent event */
-        if ((pcb->acked != 0) && ((TCPH_FLAGS(next->tcphdr) & TCP_FIN) != 0)) {
-          pcb->acked--;
-        }
-
-        pcb->snd_queuelen -= pbuf_clen(next->p);
-        tcp_seg_free(next);
-
-        LWIP_DEBUGF(TCP_QLEN_DEBUG, ("%"U16_F" (after freeing unacked)\n", (u16_t)pcb->snd_queuelen));
-        if (pcb->snd_queuelen != 0) {
-          LWIP_ASSERT("tcp_receive: valid queue length", pcb->unacked != NULL ||
-                      pcb->unsent != NULL);
-        }
-      }
-
-      /* If there's nothing left to acknowledge, stop the retransmit
-         timer, otherwise reset it to start again */
-      if(pcb->unacked == NULL)
-        pcb->rtime = -1;
-      else
-        pcb->rtime = 0;
-
-      pcb->polltmr = 0;
     } else {
       /* Fix bug bug #21582: out of sequence ACK, didn't really ack anything */
       pcb->acked = 0;

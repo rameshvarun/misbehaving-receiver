@@ -65,7 +65,7 @@ if __name__ == "__main__":
         elif args.server == 'lwip':
             server = server_node.popen('sh lwip-server.sh')
         elif args.server == 'lwip-defended':
-            raise "lwip-defended not yet implemented."
+            server = server_node.popen('sh lwip-server-defended.sh')
         else:
             raise "Unkown server type %s." % args.server
 

@@ -99,3 +99,21 @@ if __name__ == "__main__":
         ("captures/dup-ack-lwip.pcap", 'ACKs (Duplicate Ack)', 'Data Segments (Duplicate Ack)')
         ])
     
+    create_graph("LWIP Stack vs. Dup Ack Attacker", "graphs/lwip-dup-ack.png", [
+        ("captures/kernel-lwip.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/dup-ack-lwip.pcap", 'ACKs (Duplicate Ack)', 'Data Segments (Duplicate Ack)')
+        ])
+
+    # Test our defended LWIP stack against various clients.
+
+    create_graph("Defended LWIP Stack with Normal (Kernel) TCP Client", "graphs/kernel-lwip-defended.png", [("captures/kernel-lwip-defended.pcap", 'ACKs', 'Data Segments')])
+
+    create_graph("Defended LWIP Stack vs. ACK Division Attacker", "graphs/defended-lwip-ack-div.png", [
+        ("captures/kernel-lwip-defended.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/ack-division-lwip-defended.pcap", 'ACKs (Ack Division)', 'Data Segments (Ack Division)')
+        ])
+
+    create_graph("Defended LWIP Stack vs. Opt Ack Attacker", "graphs/defended-lwip-opt-ack.png", [
+        ("captures/kernel-lwip-defended.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
+        ("captures/opt-ack-lwip-defended.pcap", 'ACKs (Optimistic Ack)', 'Data Segments (Optimistic Ack)')
+        ])

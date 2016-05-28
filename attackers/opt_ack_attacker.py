@@ -26,8 +26,8 @@ if __name__ == "__main__":
     print "First data packet arrived. Sending optimistic acks."
 
     socket = conf.L2socket(iface='client-eth0') 
-    OPT_ACK_START = data.seq + 1
-    ACK_SPACING = len(data.payload)
+    OPT_ACK_START = data.seq
+    ACK_SPACING = len(data.payload.payload)
     for i in range(1, int(100000 / ACK_SPACING)):
         opt_ack = Ether() / ip_header / TCP(sport=args.sport, dport=args.dport, flags='A', ack=(OPT_ACK_START + i * ACK_SPACING), seq=(seq_no + 1))
         socket.send(opt_ack)
