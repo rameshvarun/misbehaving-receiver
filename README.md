@@ -9,7 +9,7 @@ The results here can either be replicated on EC2 or in VirtualBox. To setup an E
 ```bash
 git clone https://github.com/rameshvarun/misbehaving-receiver.git
 cd misbehaving-receiver
-sudo run-experiment.sh
+sudo ./run-experiment.sh
 ```
 
 The graphs should now be in the `graphs/` folder. The images that appear in our report are `graphs/lwip-opt-ack.png` and `graphs/defended-lwip-opt-ack.png`.
