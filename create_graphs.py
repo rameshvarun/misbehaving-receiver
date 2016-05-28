@@ -77,7 +77,7 @@ if __name__ == "__main__":
     create_graph("Kernel TCP Stack - A Normal TCP Connection", "graphs/kernel-kernel.png",
         [("captures/kernel-kernel.pcap", 'ACKs', 'Data Segments')])
 
-    create_graph("Kernel TCP Stack vs. Optimistic ACK Attacker", "graphs/opt-attack-kernel.png", [
+    create_graph("Kernel TCP Stack vs. Optimistic ACK Attacker", "graphs/opt-ack-kernel.png", [
         ("captures/kernel-kernel.pcap", 'ACKs (Normal)', 'Data Segments (Normal)'),
         ("captures/opt-ack-kernel.pcap", 'ACKs (Optimistic Ack)', 'Data Segments (Optimistic Ack)')
         ])
