@@ -103,7 +103,7 @@
  * already use it.
  */
 #ifndef MEM_LIBC_MALLOC
-#define MEM_LIBC_MALLOC                 0
+#define MEM_LIBC_MALLOC                 1
 #endif
 
 /**
@@ -112,7 +112,7 @@
 * speed and usage from interrupts!
 */
 #ifndef MEMP_MEM_MALLOC
-#define MEMP_MEM_MALLOC                 0
+#define MEMP_MEM_MALLOC                 1
 #endif
 
 /**
@@ -129,7 +129,7 @@
  * a lot of data that needs to be copied, this should be set high.
  */
 #ifndef MEM_SIZE
-#define MEM_SIZE                        1600
+#define MEM_SIZE                        16000
 #endif
 
 /**
@@ -264,7 +264,7 @@
  * (requires the LWIP_TCP option)
  */
 #ifndef MEMP_NUM_TCP_SEG
-#define MEMP_NUM_TCP_SEG                16
+#define MEMP_NUM_TCP_SEG                32
 #endif
 
 /**
@@ -272,7 +272,7 @@
  * reassembly (whole packets, not fragments!)
  */
 #ifndef MEMP_NUM_REASSDATA
-#define MEMP_NUM_REASSDATA              5
+#define MEMP_NUM_REASSDATA              10
 #endif
 
 /**
@@ -321,7 +321,7 @@
  * (only needed if you use the sequential API, like api_lib.c)
  */
 #ifndef MEMP_NUM_NETBUF
-#define MEMP_NUM_NETBUF                 2
+#define MEMP_NUM_NETBUF                 10
 #endif
 
 /**
@@ -920,7 +920,7 @@
  * (2 * TCP_MSS) for things to work well
  */
 #ifndef TCP_WND
-#define TCP_WND                         (4 * TCP_MSS)
+#define TCP_WND                         (10 * TCP_MSS)
 #endif 
 
 /**
@@ -974,7 +974,7 @@
  * To achieve good performance, this should be at least 2 * TCP_MSS.
  */
 #ifndef TCP_SND_BUF
-#define TCP_SND_BUF                     (2 * TCP_MSS)
+#define TCP_SND_BUF                     (10 * TCP_MSS)
 #endif
 
 /**

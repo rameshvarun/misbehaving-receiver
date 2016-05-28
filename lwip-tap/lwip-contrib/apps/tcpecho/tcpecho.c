@@ -38,7 +38,7 @@
 #include "lwip/sys.h"
 #include "lwip/api.h"
 
-#define DATA_SIZE 1000000
+#define DATA_SIZE 100000
 char data[DATA_SIZE];
 
 /*-----------------------------------------------------------------------------------*/
