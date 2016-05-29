@@ -6,7 +6,7 @@ The repository contains scripts for replicating the results in the paper ["Attac
 
 ## Replicating Results
 
-The results here can either be replicated on an EC2 instance or in VirtualBox. To setup an EC2 machine, use the instructions here - https://web.stanford.edu/class/cs244/ec2setup.html. Follow the instructions here to setup a local virtual machine in VirtualBox - https://web.stanford.edu/class/cs244/vbsetup.html. If you still have your virtual machine from PA1, then you should be able to use it without any problems. Note that when you SSH into your machine, you probably want to use the `-Y` flag (and have an X server running), in order to view the generated graphs. Once logged in, run the following commands.
+The results here can either be replicated on an EC2 instance or in VirtualBox. To setup an EC2 machine, use the instructions here - https://web.stanford.edu/class/cs244/ec2setup.html. Follow the instructions here to setup a local virtual machine in VirtualBox - https://web.stanford.edu/class/cs244/vbsetup.html. If you still have your virtual machine from PA1, then you should be able to use it without any problems (though the EC2 instance usually provides cleaner results). Note that when you SSH into your machine, you probably want to use the `-Y` flag (and have an X server running), in order to view the generated graphs. Once logged in, run the following commands.
 
 ```bash
 git clone https://github.com/rameshvarun/misbehaving-receiver.git
@@ -14,7 +14,7 @@ cd misbehaving-receiver
 sudo ./run-experiment.sh
 ```
 
-The graphs should now be in the `graphs/` folder. The images that appear in our report are `graphs/opt-ack-lwip.png`, `graphs/opt-ack-lwip-defended.png`, and `graphs/opt-ack-kernel.png`. If you have X11 forwarding working, just use `xdg-open`.
+The graphs should now be in the `graphs/` folder. The images that appear in our report are `graphs/opt-ack-lwip.png`, `graphs/opt-ack-lwip-defended.png`, and `graphs/opt-ack-kernel.png`. If you have X11 forwarding working, just use `xdg-open`. Otherwise, you should `scp -r` the folder.
 
 ## Files Breakdown
 - [run-experiment.sh](./run-experiment.sh) - This file runs the entire experiement, generating all of the network traces and all of the graphs.
