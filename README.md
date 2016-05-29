@@ -14,7 +14,7 @@ cd misbehaving-receiver
 sudo ./run-experiment.sh
 ```
 
-The graphs should now be in the `graphs/` folder. The images that appear in our report are `graphs/opt-ack-lwip.png` and `graphs/opt-ack-lwip-defended.png`. If you have X11 forwarding working, just use `xdg-open`.
+The graphs should now be in the `graphs/` folder. The images that appear in our report are `graphs/opt-ack-lwip.png`, `graphs/opt-ack-lwip-defended.png`, and `graphs/opt-ack-kernel.png`. If you have X11 forwarding working, just use `xdg-open`.
 
 ## Files Breakdown
 - [run-experiment.sh](./run-experiment.sh) - This file runs the entire experiement, generating all of the network traces and all of the graphs.
