@@ -2,7 +2,7 @@
 
 <img src="http://i.imgur.com/bnzyV8S.png" width="500px" height="500px" />
 
-The repository contains scripts for replicating the results in the paper ["Attacks on Congestion Control by a Misbehaving TCP Receiver"](https://cseweb.ucsd.edu/~savage/papers/CCR99.pdf) by Savage Cardwell et. al. This project was done for the [CS244](https://web.stanford.edu/class/cs244/) (Advanced Topics in Networking) class at Stanford. The associated writeup is here. (LINK NEEDED)
+The repository contains scripts for replicating the results in the paper ["Attacks on Congestion Control by a Misbehaving TCP Receiver"](https://cseweb.ucsd.edu/~savage/papers/CCR99.pdf) by Savage Cardwell et. al. This project was done for the [CS244](https://web.stanford.edu/class/cs244/) (Advanced Topics in Networking) class at Stanford. The associated writeup is [here](https://reproducingnetworkresearch.wordpress.com/2016/05/30/cs244-16-tcp-congestion-control-with-a-misbehaving-receiver/).
 
 ## Replicating Results
 
